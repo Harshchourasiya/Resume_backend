@@ -39,7 +39,7 @@ const saveOTP = (otpCode, verificationCode, body) => {
     verificationData.otpCode = otpCode;
     verificationData.verificationCode = verificationCode;
     verificationData.data = data;
-    verificationData.save().then(console.log("Save")).catch(err => {
+    verificationData.save().catch(err => {
         console.log(err);
     });
 }
@@ -53,7 +53,9 @@ const checkOTP = async(body) => {
 
     if (userData == null) return false;
 
-    if (body.email !== userData.email || body.name !== userData.name || body.password !== userData.password) {
+    if (!validator.equals(body.email, userData.email) || 
+    !validator.equals(body.name, userData.name) || 
+    !validator.equals(body.password, userData.password)) {
         return false;
     }
     return data.otpCode === body.otpCode;

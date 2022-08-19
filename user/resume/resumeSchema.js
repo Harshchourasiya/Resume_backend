@@ -17,7 +17,6 @@ const ResumeSchema = new Schema({
   },
   EmailAccessList: {
     type : [String],
-    unique: true,
     lowercase: true,
     validate : (value) => {
       return validator.isEmail(value);
