@@ -1,6 +1,6 @@
 const {mongoose} = require('mongoose');
 const userSchema = require('./userSchema');
-
+const validator = require('validator');
 const userModel = mongoose.model('Users', userSchema);
 
 const createUser = (body) => {
@@ -13,6 +13,14 @@ const createUser = (body) => {
     .catch((err) => console.log(err));
 };
 
+const isUserAuthentic = async(email, password) => {
+   const user = await userModel.findOne({Email : email}).exec();
+    if (user == null) return false;
+    if (!validator.equals(password,user.Password)) return false;
+
+    return true;
+}
+
 const containsEmail = async(email) => {
    const data = await userModel.findOne({Email : email}).exec();
    return data != null;
@@ -20,5 +28,6 @@ const containsEmail = async(email) => {
 
 module.exports = {
     createUser : createUser,
-    containsEmail : containsEmail
+    containsEmail : containsEmail,
+    isUserAuthentic : isUserAuthentic
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {containsEmail, createUser} = require('./userModel');
+const {containsEmail, createUser, isUserAuthentic} = require('./userModel');
 const validator = require('validator');
 const mail = require('../helper/mail');
 const otp = require('otp-generator');
@@ -75,6 +75,15 @@ router.post('/otpverification', async(req, res) => {
         res.status(400).send(toRes);
     } 
 
+});
+
+router.post('/login', async(req, res) => {
+    const isAuthentic = await isUserAuthentic(req.body.email, req.body.password);
+    if (isAuthentic) {
+        res.status(200).send({"status": "Success"});
+    } else {
+        return res.status(400).send({"status": "UnAuthentic"});
+    }
 });
 
 module.exports = router;
