@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {containsEmail, createUser, isUserAuthentic} = require('./userModel');
+const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic} = require('./userModel');
 const validator = require('validator');
 const mail = require('../helper/mail');
 const otp = require('otp-generator');
@@ -67,9 +67,13 @@ router.post('/otpverification', async(req, res) => {
     }
 
     if (isCorrect) {
-        createUser(req.body);
-        toRes.status = "Success";
-        res.status(200).send(toRes);
+        const isSaved = await createUserAndReturnIfSaved(req.body);
+        if (isSaved)  {
+            toRes.status = "Success";
+            res.status(200).send(toRes);
+        } else {
+            res.status(400).send(toRes);
+        }
     }
     else {
         res.status(400).send(toRes);
@@ -78,6 +82,12 @@ router.post('/otpverification', async(req, res) => {
 });
 
 router.post('/login', async(req, res) => {
+
+    /*
+    to Use this client needs to provide 
+    email : User email,
+    password : user password
+    */
     const isAuthentic = await isUserAuthentic(req.body.email, req.body.password);
     if (isAuthentic) {
         res.status(200).send({"status": "Success"});

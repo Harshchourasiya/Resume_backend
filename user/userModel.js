@@ -3,15 +3,22 @@ const userSchema = require('./userSchema');
 const validator = require('validator');
 const userModel = mongoose.model('Users', userSchema);
 
-const createUser = (body) => {
+const createUserAndReturnIfSaved = async(body) => {
     const user = new userModel;
     user.Email = body.email;
     user.Password = body.password;
     user.Name = body.name;
-    user.save()
-    .then(console.log("SuccessFully Created"))
-    .catch((err) => console.log(err));
-};
+    let isSaved = false;
+    await user.save().then(
+        ()=>{
+            isSaved = true;
+        }
+    ).catch((err) => {
+        isSaved = false;
+     });
+
+    return isSaved;
+}
 
 const isUserAuthentic = async(email, password) => {
    const user = await userModel.findOne({Email : email}).exec();
@@ -27,7 +34,7 @@ const containsEmail = async(email) => {
 }
 
 module.exports = {
-    createUser : createUser,
+    createUserAndReturnIfSaved : createUserAndReturnIfSaved,
     containsEmail : containsEmail,
     isUserAuthentic : isUserAuthentic
 }
