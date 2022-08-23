@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic} = require('./userModel');
+const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic, getUserInfo} = require('./userModel');
 const validator = require('validator');
 const mail = require('../helper/mail');
 const otp = require('otp-generator');
@@ -14,7 +14,6 @@ router.post('/new', async(req, res) =>{
     -> password,
     -> name
     */
-
 
     const {email, password, name} = req.body;
     const toRes = {
@@ -58,8 +57,8 @@ router.post('/otpverification', async(req, res) => {
     -> email,
     -> password,
     -> name,
-    -> verificationcode,
-    -> otpcode
+    -> verificationCode,
+    -> otpCode
     */
     const isCorrect = await checkOTP(req.body);
     const toRes = {
@@ -86,14 +85,41 @@ router.post('/login', async(req, res) => {
     /*
     to Use this client needs to provide 
     email : User email,
-    password : user password
+    password : user password, 
+    isRemember : user want to remember the use
     */
-    const isAuthentic = await isUserAuthentic(req.body.email, req.body.password);
+    const isAuthentic = await isUserAuthentic(req.body.email, req.body.password, req.body.isRemember);
     if (isAuthentic) {
-        res.status(200).send({"status": "Success"});
+        if (req.body.isRemember) {
+            req.session.userId = isAuthentic;
+        }
+        res.status(200).send({"status": "Success", "userId" : isAuthentic});
     } else {
         return res.status(400).send({"status": "UnAuthentic"});
     }
+});
+
+router.get('/info', async(req, res) => {
+
+    /*
+    userId or SessionId (optional if nessaray if user select not Remeber me)
+    I will use req.userId and I will save User.id in the request if user choose not to remember
+    */
+    let userId;
+    if (req.session.userId == null) {
+        userId = req.body.userId;
+    } else {
+        userId = req.session.userId;
+    }
+
+    const toRes = await getUserInfo(userId);
+
+    if (toRes == null) {
+        res.status(400).send({"Status" : "Failed"});
+    } else {
+        res.status(200).send(toRes);
+    }
+
 });
 
 module.exports = router;

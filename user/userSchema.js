@@ -24,6 +24,10 @@ const UserSchema = new Schema({
    }   
   },
 
+  Session: {
+    type: String,
+    unique : true
+  },
   Name: {
     type: String,
     minLength : 3,
