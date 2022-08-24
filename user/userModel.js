@@ -141,11 +141,40 @@ const setDefaultResume = async(userId, resumeId)=> {
 }
 
 
+const setResumeRestricted = async(userId, resumeId) => {
+    const user = await userModel.findOne({SessionId : userId});
+
+    // checking User exits
+    if (user == null) return false;
+
+    let isSuccess = false;
+    user.Resumes.map((resume) => {
+        if (resume.ResumeId === resumeId) {
+            isSuccess = true;
+            resume.IsRestricted = !resume.IsRestricted;
+        }
+    });
+
+    if (!isSuccess) return false;
+
+    try {
+        await user.save();
+        return true;
+    } catch(err) {
+        console.log(err);
+        return false;
+    }
+}
+
+
+
+
 module.exports = {
     createUserAndReturnIfSaved : createUserAndReturnIfSaved,
     containsEmail : containsEmail,
     isUserAuthentic : isUserAuthentic,
     getUserInfo : getUserInfo,
     saveResume : saveResume,
-    setDefaultResume : setDefaultResume
+    setDefaultResume : setDefaultResume,
+    setResumeRestricted : setResumeRestricted
 }

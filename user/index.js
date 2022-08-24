@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic, getUserInfo, saveResume, setDefaultResume} = require('./userModel');
+const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic, getUserInfo, saveResume, setDefaultResume, setResumeRestricted} = require('./userModel');
 const validator = require('validator');
 const mail = require('../helper/mail');
 const otp = require('otp-generator');
@@ -155,6 +155,24 @@ router.post('/setDefaultResume', async(req, res) => {
 
     const isSuccess = await setDefaultResume(getUserIdFromReq(req), req.body.ResumeId);
 
+    if (isSuccess) {
+        res.status(200).send(successRes);
+    } else {
+        res.status(400).send(failedRes);
+    }
+});
+
+
+router.post('/setResumeRestricted', async(req, res) => {
+    /*
+    Client Must Provide ResumeId From which client want to restricted
+    If The Restriction is already then this is set false
+    ResumeID (Required) 
+    */
+
+    const isSuccess = await setResumeRestricted(getUserIdFromReq(req), req.body.ResumeId);
+
+    // TODO: Maybe this will be because a duplicate code we can make a method for this one
     if (isSuccess) {
         res.status(200).send(successRes);
     } else {
