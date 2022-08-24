@@ -1,10 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic, getUserInfo} = require('./userModel');
+const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic, getUserInfo, saveResume} = require('./userModel');
 const validator = require('validator');
 const mail = require('../helper/mail');
 const otp = require('otp-generator');
 const {saveOTP, checkOTP} = require('../user/OTP/otpModel');
+
+
+
+const getUserIdFromReq = (req) => {
+    let userId;
+    if (req.session.userId == null) {
+        userId = req.body.userId;
+    } else {
+        userId = req.session.userId;
+    }
+    return userId;
+}
 
 router.post('/new', async(req, res) =>{
 
@@ -105,12 +117,6 @@ router.get('/info', async(req, res) => {
     userId or SessionId (optional if nessaray if user select not Remeber me)
     I will use req.userId and I will save User.id in the request if user choose not to remember
     */
-    let userId;
-    if (req.session.userId == null) {
-        userId = req.body.userId;
-    } else {
-        userId = req.session.userId;
-    }
 
     const toRes = await getUserInfo(userId);
 
@@ -121,5 +127,26 @@ router.get('/info', async(req, res) => {
     }
 
 });
+
+
+router.post('/saveResume', async(req, res) => {
+    /*
+    Save Resume 
+    UserId from Req or Body,
+    htmlCode : HTML Resume Code,
+    name : Name of the resume,
+    */
+
+    const toRes = await saveResume(getUserIdFromReq(req), req.body.htmlCode, req.body.name);
+
+    if (toRes) {
+        res.status(200).send({"status": "Success"});
+    } else {
+        res.status(400).send({"status": "failed"});
+    }
+});
+
+
+
 
 module.exports = router;
