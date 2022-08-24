@@ -167,6 +167,41 @@ const setResumeRestricted = async(userId, resumeId) => {
 }
 
 
+const addAccessEmailList = async(userId,resumeId, emailList) => {
+    const user = await userModel.findOne({SessionId : userId});
+
+    // checking User exits
+    if (user == null) return false;
+    let isSuccess = false;
+    let idx;
+    user.Resumes.map((resume, i) => {
+        if (resume.ResumeId === resumeId) {
+            isSuccess = true;
+            idx = i;
+        }
+    });
+
+    if (!isSuccess) return false;
+
+    // saving data 
+
+    emailList.map((email) => {
+        email = email.toLowerCase();
+        if (!user.Resumes[idx].EmailAccessList.includes(email)) {
+            user.Resumes[idx].EmailAccessList.push(email);
+        }
+    });
+
+    try {
+        await user.save();
+        return true;
+    } catch(err) {
+        console.log(err);
+        return false;
+    }
+
+}
+
 
 
 module.exports = {
@@ -176,5 +211,6 @@ module.exports = {
     getUserInfo : getUserInfo,
     saveResume : saveResume,
     setDefaultResume : setDefaultResume,
-    setResumeRestricted : setResumeRestricted
+    setResumeRestricted : setResumeRestricted,
+    addAccessEmailList : addAccessEmailList
 }
