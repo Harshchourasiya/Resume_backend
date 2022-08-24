@@ -1,12 +1,18 @@
 const express = require('express');
 const router = express.Router();
-const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic, getUserInfo, saveResume} = require('./userModel');
+const {containsEmail, createUserAndReturnIfSaved, isUserAuthentic, getUserInfo, saveResume, setDefaultResume} = require('./userModel');
 const validator = require('validator');
 const mail = require('../helper/mail');
 const otp = require('otp-generator');
 const {saveOTP, checkOTP} = require('../user/OTP/otpModel');
 
 
+const failedRes = {
+    status : "Failed" 
+}
+const successRes = {
+    status : "Success"
+}
 
 const getUserIdFromReq = (req) => {
     let userId;
@@ -73,21 +79,16 @@ router.post('/otpverification', async(req, res) => {
     -> otpCode
     */
     const isCorrect = await checkOTP(req.body);
-    const toRes = {
-        status : "Failed"
-    }
-
     if (isCorrect) {
         const isSaved = await createUserAndReturnIfSaved(req.body);
         if (isSaved)  {
-            toRes.status = "Success";
-            res.status(200).send(toRes);
+            res.status(200).send(successRes);
         } else {
-            res.status(400).send(toRes);
+            res.status(400).send(failedRes);
         }
     }
     else {
-        res.status(400).send(toRes);
+        res.status(400).send(failedRes);
     } 
 
 });
@@ -107,7 +108,7 @@ router.post('/login', async(req, res) => {
         }
         res.status(200).send({"status": "Success", "userId" : isAuthentic});
     } else {
-        return res.status(400).send({"status": "UnAuthentic"});
+        return res.status(400).send(failedRes);
     }
 });
 
@@ -121,7 +122,7 @@ router.get('/info', async(req, res) => {
     const toRes = await getUserInfo(userId);
 
     if (toRes == null) {
-        res.status(400).send({"Status" : "Failed"});
+        res.status(400).send(failedRes);
     } else {
         res.status(200).send(toRes);
     }
@@ -140,12 +141,26 @@ router.post('/saveResume', async(req, res) => {
     const toRes = await saveResume(getUserIdFromReq(req), req.body.htmlCode, req.body.name);
 
     if (toRes) {
-        res.status(200).send({"status": "Success"});
+        res.status(200).send(successRes);
     } else {
-        res.status(400).send({"status": "failed"});
+        res.status(400).send(failedRes);
     }
 });
 
+router.post('/setDefaultResume', async(req, res) => {
+    /*
+    Set Default Resume, If someone visit the main Url of the user that Resume will be display
+    Required ResumeID
+    */
+
+    const isSuccess = await setDefaultResume(getUserIdFromReq(req), req.body.ResumeId);
+
+    if (isSuccess) {
+        res.status(200).send(successRes);
+    } else {
+        res.status(400).send(failedRes);
+    }
+});
 
 
 

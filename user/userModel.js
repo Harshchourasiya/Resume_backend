@@ -66,7 +66,8 @@ const getUserInfo = async(userId) => {
 
 
 const saveResume = async(userId, code, name) => {
-    
+    // Validating Name
+    if (name == null) name = "Resume" +  otp.generate(6, {specialChars: false });
     // Validate HTML CODE here
     const options = {
         validator: 'WHATWG',
@@ -85,8 +86,10 @@ const saveResume = async(userId, code, name) => {
 
     // HTML Already Verified, Saving data in Database
 
-    userResume = await userModel.findOne({SessionId : userId});
+    const userResume = await userModel.findOne({SessionId : userId});
     
+    if (userResume == null) return false;
+
     // adding resume in user database
     const Resume = {
         Name : name,
@@ -109,10 +112,40 @@ const saveResume = async(userId, code, name) => {
 }
 
 
+const setDefaultResume = async(userId, resumeId)=> {
+    const user = await userModel.findOne({SessionId : userId});
+
+    // checking User exits
+    if (user == null) return false;
+    // Checking if ResumeId Contains in the user's Database resume
+
+    // TODO: Can be Improved We can Use ResumeId find using Database but Its Not bad Either because User can not make more that 5 resume a time
+    let isContains = false;
+    user.Resumes.map((resume) => {
+        if(resume.ResumeId == resumeId) {
+            isContains = true;
+        }
+    });
+
+    if (!isContains) return false;
+
+    // Checking is Successful
+    user.Default = resumeId;
+    try {
+        await user.save();
+        return true;
+    } catch(err) {
+        console.log(err);
+        return false;
+    }
+}
+
+
 module.exports = {
     createUserAndReturnIfSaved : createUserAndReturnIfSaved,
     containsEmail : containsEmail,
     isUserAuthentic : isUserAuthentic,
     getUserInfo : getUserInfo,
-    saveResume : saveResume
+    saveResume : saveResume,
+    setDefaultResume : setDefaultResume
 }

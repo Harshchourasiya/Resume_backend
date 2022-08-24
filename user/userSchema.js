@@ -44,7 +44,7 @@ const UserSchema = new Schema({
       return validator.matches(value, tags);
     }
   },
-  Default: mongoose.ObjectId,
+  Default: String,
   Resumes: {
     type: [ResumeSchema],
     defalut:  {},
