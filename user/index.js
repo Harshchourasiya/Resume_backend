@@ -116,15 +116,15 @@ router.post("/login", async (req, res) => {
   const isAuthentic = await isUserAuthentic(
     req.body.email,
     req.body.password,
-    req.body.isRemember
   );
+
   if (isAuthentic) {
-    if (req.body.isRemember) {
-      req.session.userId = isAuthentic;
-    }
+    // Saving the session Id in the user's system (IF isRemeber is True)
+    if (req.body.isRemember) req.session.userId = isAuthentic;
+
     res.status(200).send({ status: "Success", userId: isAuthentic });
   } else {
-    return res.status(400).send(failedRes);
+    res.status(400).send(failedRes);
   }
 });
 

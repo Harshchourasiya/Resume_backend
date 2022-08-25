@@ -21,15 +21,14 @@ const createUserAndReturnIfSaved = async(body) => {
 
 
 
-const isUserAuthentic = async(email, password, isRemember) => {
-   const user = await userModel.findOne({Email : email}).exec();
+const isUserAuthentic = async(email, password) => {
+   const user = await userModel.findOne({Email : email}).where('Password').eq(password).exec();
 
-    if (user == null || !validator.equals(password,user.Password)){
+    if (user == null){
         return null;
     }   
 
-
-    user.Session.id = otp.generate(20, {specialChars: false });
+    user.Session = otp.generate(20, {specialChars: false });
     await user.save();
     return user.Session; 
 }
