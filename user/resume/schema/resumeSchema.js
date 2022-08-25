@@ -1,6 +1,6 @@
 // import mongoose from 'mongoose';
 const { Schema } = require('mongoose');
-const AnalyticSchema = require('./analyticSchema.js');
+const AnalyticSchema = require('../analytic/analyticSchema');
 const validator = require('validator')
 
 // ! I Will implement HTML Validator Later when I will be working on HTML Data

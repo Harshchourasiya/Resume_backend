@@ -1,36 +1,9 @@
-const { Schema, mongoose } = require('mongoose');
-const validator = require('validator')
+const { mongoose } = require('mongoose');
 const {encodeOTPVerificationCode, decodeOTPVerificationCode} = require('../../helper/crypto');
+const model = mongoose.model('otps', require('./otpSchema'));
+const validator = require('validator');
 
-const otpSchema = new Schema({
-    otpCode : {
-        type : String,
-        minLength : 6,
-        maxLength : 6,
-        required : true,
-        validate : (value) =>{
-            return validator.isNumeric(value);
-        }
-    },
-    verificationCode : {
-        type : String,
-        unique: true,
-        minLength : 12,
-        maxLength : 12,
-        required: true
-    },
-    data : {
-        type : String,
-        required : true
-    }
-});
-
-const model = mongoose.model('otps', otpSchema);
-
-
-// TODO : Error Handling is remains
-
-const saveOTP = (otpCode, verificationCode, body) => {
+const saveOTP = async(otpCode, verificationCode, body) => {
         // encoding data 
     const data =  encodeOTPVerificationCode({
         email:body.email, password: body.password, name : body.name}, otpCode);
@@ -39,13 +12,18 @@ const saveOTP = (otpCode, verificationCode, body) => {
     verificationData.otpCode = otpCode;
     verificationData.verificationCode = verificationCode;
     verificationData.data = data;
-    verificationData.save().catch(err => {
+
+    try {
+        await verificationData.save();
+        return true;
+    } catch(err) {
         console.log(err);
-    });
+        return false;
+    }
 }
 
 const checkOTP = async(body) => {
-    const data = await model.findOneAndDelete({verificationCode : body.verificationCode}).exec();
+    const data = await model.findOne({verificationCode : body.verificationCode}).exec();
     
     if (data == null) return false;
 

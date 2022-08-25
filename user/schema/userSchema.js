@@ -1,6 +1,6 @@
-const { Schema, mongoose } = require('mongoose');
+const { Schema} = require('mongoose');
 const validator = require('validator')
-const ResumeSchema = require('./resume/resumeSchema.js');
+const ResumeSchema = require('../resume/schema/resumeSchema');
 
 const tags = ["Founder", "Contributor"];
 

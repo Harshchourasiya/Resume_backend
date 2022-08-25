@@ -5,23 +5,18 @@ const {
   createUserAndReturnIfSaved,
   isUserAuthentic,
   getUserInfo,
-  saveResume,
-  setDefaultResume,
-  setResumeRestricted,
-  addAccessEmailList
-} = require("./userModel");
+} = require("./model/userModel");
+
 const validator = require("validator");
 const mail = require("../helper/mail");
 const otp = require("otp-generator");
-const { saveOTP, checkOTP } = require("../user/OTP/otpModel");
+const { saveOTP, checkOTP } = require("./OTP/otpModel");
+const { failedRes, successRes } = require("../helper/responesHelper");
 
-const failedRes = {
-  status: "Failed",
-};
-const successRes = {
-  status: "Success",
-};
+// Using express().use to send resume request to the resume/index.js file
+// express().use("/resume", userResume);
 
+//! This code is Duplicated Needed to Be Removed (We can create another file because this code is also used in resume/index.js file so We have to do that Later)
 const getUserIdFromReq = (req) => {
   let userId;
   if (req.session.userId == null) {
@@ -41,10 +36,7 @@ router.post("/new", async (req, res) => {
     */
 
   const { email, password, name } = req.body;
-  const toRes = {
-    status: "",
-    verificationCode: "Null",
-  };
+  const toRes = successRes;
 
   if (
     !validator.isEmail(email) ||
@@ -75,10 +67,11 @@ router.post("/new", async (req, res) => {
   const verificationCode = otp.generate(12, { specialChars: false });
 
   // storing OTP and Verification code and data
-  saveOTP(code, verificationCode, req.body);
+  const isSaved = saveOTP(code, verificationCode, req.body);
+  // Checking if OTP is Not saved
+  if (!isSaved) res.status(400).send(failedRes);
 
   // Sending res
-  toRes.status = "Success";
   toRes.verificationCode = verificationCode;
 
   return res.status(200).send(toRes);
@@ -92,15 +85,22 @@ router.post("/otpverification", async (req, res) => {
     -> name,
     -> verificationCode,
     -> otpCode
+
+    => return sessionId
     */
   const isCorrect = await checkOTP(req.body);
+
   if (isCorrect) {
+
     const isSaved = await createUserAndReturnIfSaved(req.body);
-    if (isSaved) {
-      res.status(200).send(successRes);
+    if (isSaved != null) {
+      const toRes = successRes;
+      toRes.sessionId = isSaved;
+      res.status(200).send(toRes);
     } else {
       res.status(400).send(failedRes);
     }
+
   } else {
     res.status(400).send(failedRes);
   }
@@ -113,16 +113,15 @@ router.post("/login", async (req, res) => {
     password : user password, 
     isRemember : user want to remember the use
     */
-  const isAuthentic = await isUserAuthentic(
-    req.body.email,
-    req.body.password,
-  );
+  const isAuthentic = await isUserAuthentic(req.body.email, req.body.password);
 
   if (isAuthentic) {
     // Saving the session Id in the user's system (IF isRemeber is True)
     if (req.body.isRemember) req.session.userId = isAuthentic;
 
-    res.status(200).send({ status: "Success", userId: isAuthentic });
+    const toRes = successRes;
+    toRes.userId = isAuthentic;
+    res.status(200).send(toRes);
   } else {
     res.status(400).send(failedRes);
   }
@@ -130,95 +129,15 @@ router.post("/login", async (req, res) => {
 
 router.get("/info", async (req, res) => {
   /*
-    userId or SessionId (optional if nessaray if user select not Remeber me)
-    I will use req.userId and I will save User.id in the request if user choose not to remember
+    userId ()
     */
 
-  const toRes = await getUserInfo(userId);
+  const toRes = await getUserInfo(getUserIdFromReq(req));
 
   if (toRes == null) {
     res.status(400).send(failedRes);
   } else {
     res.status(200).send(toRes);
-  }
-});
-
-router.post("/saveResume", async (req, res) => {
-  /*
-    Save Resume 
-    UserId from Req or Body,
-    htmlCode : HTML Resume Code,
-    name : Name of the resume,
-    */
-
-  const toRes = await saveResume(
-    getUserIdFromReq(req),
-    req.body.htmlCode,
-    req.body.name
-  );
-
-  if (toRes) {
-    res.status(200).send(successRes);
-  } else {
-    res.status(400).send(failedRes);
-  }
-});
-
-router.post("/setDefaultResume", async (req, res) => {
-  /*
-    Set Default Resume, If someone visit the main Url of the user that Resume will be display
-    Required ResumeID
-    */
-
-  const isSuccess = await setDefaultResume(
-    getUserIdFromReq(req),
-    req.body.ResumeId
-  );
-
-  if (isSuccess) {
-    res.status(200).send(successRes);
-  } else {
-    res.status(400).send(failedRes);
-  }
-});
-
-router.post("/setResumeRestricted", async (req, res) => {
-  /*
-    Client Must Provide ResumeId From which client want to restricted
-    If The Restriction is already then this is set false
-    ResumeID (Required) 
-    */
-
-  const isSuccess = await setResumeRestricted(
-    getUserIdFromReq(req),
-    req.body.ResumeId
-  );
-
-  // TODO: Maybe this will be because a duplicate code we can make a method for this one
-  if (isSuccess) {
-    res.status(200).send(successRes);
-  } else {
-    res.status(400).send(failedRes);
-  }
-});
-
-router.post("/addAccessEmailList", async (req, res) => {
-  /*
-    this will add the access Email to the restricted Resume (50 is Max Limite)
-    ResumeId (Required),
-    AccessEmailList (Required) (Array)
-    */
-
-  const isSuccess = await addAccessEmailList(
-    getUserIdFromReq(req),
-    req.body.ResumeId,
-    req.body.AccessEmailList
-  );
-  // TODO: Maybe this will be because a duplicate code we can make a method for this one
-  if (isSuccess) {
-    res.status(200).send(successRes);
-  } else {
-    res.status(400).send(failedRes);
   }
 });
 
