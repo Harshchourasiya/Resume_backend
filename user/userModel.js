@@ -10,16 +10,13 @@ const createUserAndReturnIfSaved = async(body) => {
     user.Email = body.email;
     user.Password = body.password;
     user.Name = body.name;
-    let isSaved = false;
-    await user.save().then(
-        ()=>{
-            isSaved = true;
-        }
-    ).catch((err) => {
-        isSaved = false;
-     });
 
-    return isSaved;
+    try {
+        await user.save();
+        return true;
+    } catch(err) {
+        return false;
+    }
 }
 
 

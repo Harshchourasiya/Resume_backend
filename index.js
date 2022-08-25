@@ -4,7 +4,6 @@ const app = express();
 const user = require('./user/index.js');
 const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
-// creating 24 hours from milliseconds
 const oneDay = 1000 * 60 * 60 * 24;
 
 //session middleware
