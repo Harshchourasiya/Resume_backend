@@ -5,6 +5,7 @@ const {
   createUserAndReturnIfSaved,
   isUserAuthentic,
   getUserInfo,
+  deleteUser
 } = require("./model/userModel");
 
 const validator = require("validator");
@@ -18,13 +19,7 @@ const { failedRes, successRes } = require("../helper/responesHelper");
 
 //! This code is Duplicated Needed to Be Removed (We can create another file because this code is also used in resume/index.js file so We have to do that Later)
 const getUserIdFromReq = (req) => {
-  let userId;
-  if (req.session.userId == null) {
-    userId = req.body.userId;
-  } else {
-    userId = req.session.userId;
-  }
-  return userId;
+  return req.cookies.access_token;
 };
 
 router.post("/new", async (req, res) => {
@@ -44,8 +39,7 @@ router.post("/new", async (req, res) => {
     !validator.isStrongPassword(password) ||
     (await containsEmail(email))
   ) {
-    toRes.status = "Failed";
-    return res.status(400).send(toRes);
+    return res.status(400).send(failedRes);
   }
 
   // Generate OTP Code
@@ -74,10 +68,15 @@ router.post("/new", async (req, res) => {
   // Sending res
   toRes.verificationCode = verificationCode;
 
+  // for Checking sending otp
+  if (process.env['TEST']) {
+    toRes.otpCode = code;
+  }
+
   return res.status(200).send(toRes);
 });
 
-router.post("/otpverification", async (req, res) => {
+router.get("/otpverification", async (req, res) => {
   /*
     For this frontend needs to provide 
     -> email,
@@ -94,9 +93,7 @@ router.post("/otpverification", async (req, res) => {
 
     const isSaved = await createUserAndReturnIfSaved(req.body);
     if (isSaved != null) {
-      const toRes = successRes;
-      toRes.sessionId = isSaved;
-      res.status(200).send(toRes);
+      res.status(200).send(successRes);
     } else {
       res.status(400).send(failedRes);
     }
@@ -106,7 +103,7 @@ router.post("/otpverification", async (req, res) => {
   }
 });
 
-router.post("/login", async (req, res) => {
+router.get("/login", async (req, res) => {
   /*
     to Use this client needs to provide 
     email : User email,
@@ -117,11 +114,15 @@ router.post("/login", async (req, res) => {
 
   if (isAuthentic) {
     // Saving the session Id in the user's system (IF isRemeber is True)
-    if (req.body.isRemember) req.session.userId = isAuthentic;
-
+    let maxDay = 1;
+    if (req.body.isRemember) maxDay = 30; 
     const toRes = successRes;
-    toRes.userId = isAuthentic;
-    res.status(200).send(toRes);
+
+    if (process.env['TEST']) toRes.access_token = isAuthentic; 
+    res.cookie("access_token", isAuthentic, {
+      httpOnly: true,
+      maxDays : maxDay
+    }).status(200).send(toRes);
   } else {
     res.status(400).send(failedRes);
   }
@@ -131,7 +132,6 @@ router.get("/info", async (req, res) => {
   /*
     userId ()
     */
-
   const toRes = await getUserInfo(getUserIdFromReq(req));
 
   if (toRes == null) {
@@ -139,6 +139,19 @@ router.get("/info", async (req, res) => {
   } else {
     res.status(200).send(toRes);
   }
+});
+
+router.delete("/deleteAccount", async(req, res) => {
+  const isSuccessful = await deleteUser(getUserIdFromReq(req));
+
+  if (isSuccessful) {
+    res.clearCookie('access_token');
+    res.status(200).send(successRes);
+  } else {
+
+    res.status(400).send(failedRes);
+  }
+
 });
 
 module.exports = router;

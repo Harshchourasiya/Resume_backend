@@ -10,13 +10,7 @@ const { failedRes, successRes } = require("../../helper/responesHelper");
 
 //! This is code is a Duplicate of the code used in the ../index.js
 const getUserIdFromReq = (req) => {
-  let userId;
-  if (req.session.userId == null) {
-    userId = req.body.userId;
-  } else {
-    userId = req.session.userId;
-  }
-  return userId;
+  return  req.cookies.access_token;
 };
 router.post("/saveResume", async (req, res) => {
   /*
@@ -83,7 +77,7 @@ router.post("/addAccessEmailList", async (req, res) => {
       this will add the access Email to the restricted Resume (50 is Max Limite)
       ResumeId (Required),
       AccessEmailList (Required) (Array)
-      */
+      */P
 
   const isSuccess = await addAccessEmailList(
     getUserIdFromReq(req),

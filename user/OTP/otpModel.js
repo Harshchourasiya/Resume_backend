@@ -23,7 +23,7 @@ const saveOTP = async(otpCode, verificationCode, body) => {
 }
 
 const checkOTP = async(body) => {
-    const data = await model.findOne({verificationCode : body.verificationCode}).exec();
+    const data = await model.findOneAndDelete({verificationCode : body.verificationCode}).exec();
     
     if (data == null) return false;
 

@@ -6,8 +6,7 @@ const validator = require('validator')
 // ! I Will implement HTML Validator Later when I will be working on HTML Data
 const ResumeSchema = new Schema({
   ResumeId : {
-    type: String,
-    unique : true
+    type: String
   },
   Name : {
     type: String,
