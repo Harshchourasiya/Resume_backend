@@ -14,7 +14,7 @@
 ## Project Details
 
 The website can solve the issue that mostly Freshers for IT sector struggle like many peoples share there resume online but don't get any response. So This website help the User to analyze the resume through recruiter behaviour and improve accordingly.
-If you have time you should also read the story of the user (offcourse Future user) How this website will help them. This story will Help you to deeply understand this website's goal. It's a small story [here](story.md).
+If you have time you should also read the story of the user (offcourse Future user) How this website will help them. This story will Help you to deeply understand this website's goal. It's a small story [here](Story.md).
 
 If you don't have time, Following the main features of the website:-
 
@@ -58,7 +58,7 @@ If you don't like or don't know backend then you can contribute on its frontend 
 
 ## Special Thanks for Contributors
 
-If you contribute on this project then you get a tag on this website wheneven someone visit your resume on this website. They are able to see the tag that's shows that you help us in creating this website. It's not a big deal but it's the least we can do for our contributor. I again encourage you to read this [story](story.md) if you have time.
+If you contribute on this project then you get a tag on this website wheneven someone visit your resume on this website. They are able to see the tag that's shows that you help us in creating this website. It's not a big deal but it's the least we can do for our contributor. I again encourage you to read this [story](Story.md) if you have time.
 
 ***If you face any problem or want to give any suggestion Please Raise a Issue.***
 
