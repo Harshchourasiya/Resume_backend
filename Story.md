@@ -1,4 +1,4 @@
-### Story of the Normal Student and Who Animre can change it
+### Story of the Normal Student and How Animre can change it
 
 In the small room. A boy with black hair who is around 22 year sitting on the chair in front of the study table.
 He is doing nothing, only looking at the screen of the laptop which is in front on him. he have an annoying look on this face.
