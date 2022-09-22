@@ -30,7 +30,6 @@ const ResumeSchema = new Schema({
     type : [{
       type: String,
       lowercase: true,
-      unique: true,
       validate : (value) => {
         return validator.isEmail(value);
       }

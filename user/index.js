@@ -32,7 +32,6 @@ router.post("/new", async (req, res) => {
 
   const { email, password, name } = req.body;
   const toRes = successRes;
-
   if (
     !validator.isEmail(email) ||
     !validator.isAlpha(name) ||
@@ -76,7 +75,7 @@ router.post("/new", async (req, res) => {
   return res.status(200).send(toRes);
 });
 
-router.get("/otpverification", async (req, res) => {
+router.post("/otpverification", async (req, res) => {
   /*
     For this frontend needs to provide 
     -> email,
@@ -103,7 +102,7 @@ router.get("/otpverification", async (req, res) => {
   }
 });
 
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
   /*
     to Use this client needs to provide 
     email : User email,

@@ -2,13 +2,13 @@
 const mocha = require('mocha')
 const chai = require('chai')
 const chaiHttp = require('chai-http');
-
 chai.use(chaiHttp);
 
 chai.expect();
 chai.should();
 // pass this instead of server to avoid error
-const API = 'http://localhost:3000'
+require('dotenv').config();
+const API = 'http://localhost:'+ process.env['PORT']
 describe("Now Let's Checkout that website", () => {
     let otpCode, verificationCode, token;
     const dataToSend = {
@@ -38,7 +38,7 @@ describe("Now Let's Checkout that website", () => {
         data.verificationCode = verificationCode;
         chai
         .request(API)
-        .get("/user/otpverification")
+        .post("/user/otpverification")
         .set('content-type', 'application/json')
         .send(data)
         .end((err, res) => {
@@ -53,7 +53,7 @@ describe("Now Let's Checkout that website", () => {
         data.isRemember = false;
         chai
         .request(API)
-        .get("/user/login")
+        .post("/user/login")
         .set('content-type', 'application/json')
         .send(data)
         .end((err, res) => {
