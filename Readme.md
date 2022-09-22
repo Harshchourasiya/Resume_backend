@@ -4,12 +4,12 @@
 
 ### Table of Contents
 
-- [Project Details](https://github.com/Harshchourasiya/Resume_backend/edit/main/Readme.md#project-details)
-- [Techonologies](https://github.com/Harshchourasiya/Resume_backend/edit/main/Readme.md#technologies)
-- [Setup](https://github.com/Harshchourasiya/Resume_backend/edit/main/Readme.md#setup)
-- [Understand the Codebase](https://github.com/Harshchourasiya/Resume_backend/edit/main/Readme.md#understand-the-codebase)
-- [Don't Like Backend?](https://github.com/Harshchourasiya/Resume_backend/edit/main/Readme.md#dont-like-backend)
-- [Special Thanks for Contributors](https://github.com/Harshchourasiya/Resume_backend/edit/main/Readme.md#special-thanks-for-contributors)
+- [Project Details](https://github.com/Harshchourasiya/Resume_backend#project-details)
+- [Techonologies](https://github.com/Harshchourasiya/Resume_backend#technologies)
+- [Setup](https://github.com/Harshchourasiya/Resume_backend#setup)
+- [Understand the Codebase](https://github.com/Harshchourasiya/Resume_backend#understand-the-codebase)
+- [Don't Like Backend?](https://github.com/Harshchourasiya/Resume_backend#dont-like-backend)
+- [Special Thanks for Contributors](https://github.com/Harshchourasiya/Resume_backend#special-thanks-for-contributors)
 
 ## Project Details
 
