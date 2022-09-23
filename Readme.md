@@ -54,7 +54,7 @@ In this section We will discuss some important thing about codebase that might h
 
 ## Don't Like Backend
 
-If you don't like or don't know backend then you can contribute on its frontend part as well from here.
+If you don't like or don't know backend then you can contribute on its frontend part as well from [here](https://github.com/Harshchourasiya/resume_frontend).
 
 ## Special Thanks for Contributors
 
