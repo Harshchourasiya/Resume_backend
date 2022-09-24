@@ -37,7 +37,7 @@ If you don't have time, Following the main features of the website:-
 3. Run Mongodb server by command ```mongod```
 4. Run command ```npm install```
 5. Run command ```npm run test``` (For Testing)
-6. Run command ```npm run start```
+6. Run command ```npm run server```
 7. The API starts running in ```localhost:3001``` 
 
 
