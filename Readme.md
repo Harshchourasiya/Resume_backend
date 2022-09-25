@@ -1,4 +1,4 @@
-# This Project is not active for Now, You can contribute on Frontend from [here](https://github.com/Harshchourasiya/resume_frontend).
+# This Project is not active for Now, You can contribute on Frontend from [here.](https://github.com/Harshchourasiya/resume_frontend)
 
 # Animre - *An*alyze , *im*prove , *re*peat
 
