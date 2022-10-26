@@ -127,12 +127,12 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// User Info for Profile Page
 router.get("/info", async (req, res) => {
   /*
     userId ()
     */
   const toRes = await getUserInfo(getUserIdFromReq(req));
-
   if (toRes == null) {
     res.status(400).send(failedRes);
   } else {
@@ -140,6 +140,15 @@ router.get("/info", async (req, res) => {
   }
 });
 
+// Logout
+
+router.get("/logout", async(req, res) => {
+  res.clearCookie('access_token');
+  res.end();
+  res.status(200).send(successRes);
+});
+
+// Deleting the Account of the User
 router.delete("/deleteAccount", async(req, res) => {
   const isSuccessful = await deleteUser(getUserIdFromReq(req));
 

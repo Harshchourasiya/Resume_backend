@@ -9,6 +9,7 @@ chai.should();
 // pass this instead of server to avoid error
 require('dotenv').config();
 const API = 'http://localhost:'+ process.env['PORT']
+
 describe("Now Let's Checkout that website", () => {
     let otpCode, verificationCode, token;
     const dataToSend = {
@@ -63,6 +64,8 @@ describe("Now Let's Checkout that website", () => {
             done();
         });
     })
+
+
 
 
     

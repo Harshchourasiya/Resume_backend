@@ -46,22 +46,19 @@ const containsEmail = async (email) => {
 const getUserInfo = async (userId) => {
   const userInfo = await userModel.findOne({ Session: userId });
   // checking user
-
   if (userInfo == null) return null;
 
   const resumes = [];
-  // Storing the resumes data in the map
+  // Storing the resumes data in the map'
   userInfo.Resumes.map((a) => {
-    resumes.append({
+    resumes.push({
       ResumeId: a.ResumeId,
-      EmailAccessList: a.EmailAccessList,
-      IsRestricted: a.IsRestricted,
+      ResumeName: a.ResumeName
     });
   });
   const toRes = {
     Name: userInfo.Name,
-    Tag: userInfo.Tag,
-    Default: userInfo.Default,
+    Email: userInfo.Email,
     Resumes: resumes,
   };
 
@@ -69,12 +66,12 @@ const getUserInfo = async (userId) => {
 };
 
 
-const deleteUser = async(token) => {
+const deleteUser = async (token) => {
   if (token == null) return false;
   try {
-    await userModel.deleteOne({Session: token});
+    await userModel.deleteOne({ Session: token });
     return true;
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return false;
   }
@@ -86,5 +83,5 @@ module.exports = {
   containsEmail: containsEmail,
   isUserAuthentic: isUserAuthentic,
   getUserInfo: getUserInfo,
-  deleteUser : deleteUser
+  deleteUser: deleteUser
 };

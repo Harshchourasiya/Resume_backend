@@ -1,47 +1,93 @@
-// import mongoose from 'mongoose';
 const { Schema } = require('mongoose');
-const AnalyticSchema = require('../analytic/analyticSchema');
 const validator = require('validator')
 
-// ! I Will implement HTML Validator Later when I will be working on HTML Data
+
+const Educations = new Schema({
+  CollegeName : {
+    type: String,
+    maxLength : 100
+  },
+  Major : {
+    type: String,
+    maxLength : 100
+  },
+  CGPA :String,
+  Starting : String,
+  Ending : String
+});
+
+const Experiences = new Schema({
+  CompanyName : {
+    type: String,
+    maxLength : 100
+  },
+  Position : {
+    type: String,
+    maxLength : 100
+  },
+  Duties : {
+    type : String,
+    maxLength : 1500  
+  },
+  Starting : String,
+  Ending : String
+});
+
+const Projects = new Schema({
+  Name : {
+    type: String,
+    maxLength : 100
+  },
+  Link : {
+    type: String,
+    minLength: 1,
+    maxLength : 100
+  },
+  Detail : {
+    type : String,
+    maxLength : 1500
+  }
+});
+
+const Profiles = new Schema({
+  Name : {
+    type: String,
+    maxLength : 100
+  },
+  Link : {
+    type: String,
+    maxLength : 100
+  }
+});
+
+
 const ResumeSchema = new Schema({
   ResumeId : {
     type: String
   },
-  Name : {
+  ResumeName : {
     type: String,
-    minLength : 5,
-    maxLength: 50,
-    validate : (value) =>{
-      return validator.isAlphanumeric(value);
-    }
+    maxLength: 50
   },
-  HTMLCode: {
+  Name : {
     type : String,
-    required : true,
-    minLength: 100,
-    maxLength: 10000
+    maxLength : 50
   },
-  IsRestricted: {
-   type : Boolean,
-   default: false
+  Position : {
+    type : String,
+    maxLength : 50
   },
-  EmailAccessList: {
-    type : [{
-      type: String,
-      lowercase: true,
-      validate : (value) => {
-        return validator.isEmail(value);
-      }
-  }],
-  validate : (value) => {
-    return value.length < 50;
-  }
+  AboutMe : {
+    type: String,
+    maxLength : 1500
   },
-  AnalyticData: {
-    type: AnalyticSchema,
-    defalut:  {}
-  }
+  Educations : {
+    type: [Educations]
+  },
+  Experiences: [Experiences],
+  Projects : [Projects],
+  Profiles : [Profiles],
+  Skills : [String]
 });
 
 module.exports = ResumeSchema;

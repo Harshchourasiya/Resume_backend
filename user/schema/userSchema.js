@@ -2,8 +2,6 @@ const { Schema} = require('mongoose');
 const validator = require('validator')
 const ResumeSchema = require('../resume/schema/resumeSchema');
 
-const tags = ["Founder", "Contributor"];
-
 const UserSchema = new Schema({
 
   Email:  {
@@ -37,14 +35,6 @@ const UserSchema = new Schema({
       return validator.isAlpha(value);
     }
   },
-
-  Tag:   {
-    type : String,
-    validate: (value) =>{
-      return validator.matches(value, tags);
-    }
-  },
-  Default: String,
   Resumes: {
     type: [ResumeSchema],
     defalut:  {},
