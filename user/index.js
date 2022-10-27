@@ -13,11 +13,8 @@ const mail = require("../helper/mail");
 const otp = require("otp-generator");
 const { saveOTP, checkOTP } = require("./OTP/otpModel");
 const { failedRes, successRes } = require("../helper/responesHelper");
+const {OTP_MAIL_FROM, OTP_MAIL_SUBJECT, GET_OTP_MAIL_HTML} = require("../helper/string")
 
-// Using express().use to send resume request to the resume/index.js file
-// express().use("/resume", userResume);
-
-//! This code is Duplicated Needed to Be Removed (We can create another file because this code is also used in resume/index.js file so We have to do that Later)
 const getUserIdFromReq = (req) => {
   return req.cookies.access_token;
 };
@@ -49,26 +46,27 @@ router.post("/new", async (req, res) => {
   });
 
   // Send Mail
-  mail.send({
-    from: "Resume Builder <Harsh@gmail.com>",
+  const isOtpSend = await mail.send({
+    from: OTP_MAIL_FROM,
     to: email,
-    subject: "Hey, One Time Password is Here",
-    text: `${code} is your otp`,
+    subject: OTP_MAIL_SUBJECT,
+    html: GET_OTP_MAIL_HTML(code),
   });
-
+  
+  if (!isOtpSend) return res.status(400).send(failedRes);
   // Generate Verification Code
   const verificationCode = otp.generate(12, { specialChars: false });
 
   // storing OTP and Verification code and data
   const isSaved = saveOTP(code, verificationCode, req.body);
   // Checking if OTP is Not saved
-  if (!isSaved) res.status(400).send(failedRes);
+  if (!isSaved) return res.status(400).send(failedRes);
 
   // Sending res
   toRes.verificationCode = verificationCode;
 
   // for Checking sending otp
-  if (process.env['TEST']) {
+  if (process.env['TEST']===1) {
     toRes.otpCode = code;
   }
 
@@ -89,7 +87,6 @@ router.post("/otpverification", async (req, res) => {
   const isCorrect = await checkOTP(req.body);
 
   if (isCorrect) {
-
     const isSaved = await createUserAndReturnIfSaved(req.body);
     if (isSaved != null) {
       res.status(200).send(successRes);
@@ -98,7 +95,7 @@ router.post("/otpverification", async (req, res) => {
     }
 
   } else {
-    res.status(400).send(failedRes);
+    return res.status(400).send(failedRes);
   }
 });
 
@@ -117,7 +114,8 @@ router.post("/login", async (req, res) => {
     if (req.body.isRemember) maxDay = 30; 
     const toRes = successRes;
 
-    if (process.env['TEST']) toRes.access_token = isAuthentic; 
+    if (process.env['TEST']===1) toRes.access_token = isAuthentic; 
+    
     res.cookie("access_token", isAuthentic, {
       httpOnly: true,
       maxDays : maxDay
@@ -144,8 +142,8 @@ router.get("/info", async (req, res) => {
 
 router.get("/logout", async(req, res) => {
   res.clearCookie('access_token');
-  res.end();
   res.status(200).send(successRes);
+  res.end();
 });
 
 // Deleting the Account of the User

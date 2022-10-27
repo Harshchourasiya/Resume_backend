@@ -10,13 +10,14 @@ const send = async(body) => {
       }
   });
 
-  transporter.sendMail({
-    from: body.from, 
-    to: body.to, 
-    subject: body.subject, 
-    text: body.text
-  });
-
+    await transporter.sendMail({
+      from: body.from, 
+      to: body.to, 
+      subject: body.subject, 
+      html: body.html
+    });
+    
+    return true;
 }
 
 module.exports = {

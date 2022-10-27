@@ -1,21 +1,22 @@
 const { mongoose } = require("mongoose");
 const otp = require("otp-generator");
-const userModel = mongoose.model("Users", require("../../schema/userSchema"));
+const userModel = mongoose.model("users", require("../../schema/userSchema"));
 
 // Saving Resume
 const saveResume = async (userId, resumeId, data, name) => {
-  const user = await userModel.findOne({ SessionId: userId });
+  const user = await userModel.findOne({ Session: userId });
   // checking User exits
-  if (user == null) return false;
+  if (user === null) return false;
 
   let idx = user.Resumes.findIndex((resume) => {
     return resume.ResumeId === resumeId
   });
+
   if (idx < 0) {
     // Creating Resume
     const resume = {};
     // Validating Name if Name is not given by the client then random name will generate
-    if (name == null) name = "Resume" + otp.generate(6, { specialChars: false });
+    if (name === null) name = "Resume" + otp.generate(6, { specialChars: false });
     resume.ResumeName = name;
     resume.ResumeId = otp.generate(20, { specialChars: false })
     setDataToResume(resume, data);
@@ -96,8 +97,6 @@ const getResumeData = async (userId, resumeId) => {
     return resume.ResumeId === resumeId
   });
   if (idx < 0) return false;
-  console.log(user.Resumes[idx]);
-
   return user.Resumes[idx];
 }
 
