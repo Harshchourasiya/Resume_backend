@@ -19,7 +19,6 @@ this request is to save resume or Create resume
 */
 router.post('/saveResume', async(req, res)=> {
   const isSuccess = await saveResume(getUserIdFromReq(req), req.body.resumeId, req.body.data, req.body.name);
-  // isSuccess = true;
   if (isSuccess) {
     res.status(200).send(successRes);
   } else {

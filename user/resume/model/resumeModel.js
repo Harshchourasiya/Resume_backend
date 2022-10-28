@@ -102,25 +102,24 @@ const getResumeData = async (userId, resumeId) => {
 
 
 const deleteResume = async (userId, resumeId) => {
-  const user = await userModel.findOne({ SessionId: userId });
-  if (user == null) return false;
-
-  const resumes = [];
-  user.Resumes.map((resume) => {
-    if (resume.ResumeId !== resumeId) resumes.push(resume);
-  });
-  user.Resumes = resumes;
+  console.log(userId + " " + resumeId);
   try {
-    await user.save();
+    await userModel.updateOne({ SessionId: userId }, {
+      $pullAll: {
+        resumes: [{ResumeId: resumeId}],
+      },
+    });
+
     return true;
   } catch (err) {
     console.log(err);
     return false;
   }
+
 }
 
 module.exports = {
   getResumeData: getResumeData,
   saveResume: saveResume,
-  deleteResume : deleteResume
+  deleteResume: deleteResume
 };
