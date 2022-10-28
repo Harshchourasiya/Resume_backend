@@ -92,7 +92,7 @@ const setDataToResume = (resume, data) => {
 }
 
 const getResumeData = async (userId, resumeId) => {
-  const user = await userModel.findOne({ SessionId: userId });
+  const user = await userModel.findOne({ Session: userId });
   let idx = user.Resumes.findIndex((resume) => {
     return resume.ResumeId === resumeId
   });
@@ -102,13 +102,16 @@ const getResumeData = async (userId, resumeId) => {
 
 
 const deleteResume = async (userId, resumeId) => {
-  try {
-    await userModel.updateOne({ SessionId: userId }, {
-      $pullAll: {
-        Resumes: [{ResumeId: resumeId}],
-      },
-    });
+  const user = await userModel.findOne({ SessionId: userId });
+  if (user == null) return false;
 
+  const resumes = [];
+  user.Resumes.map((resume) => {
+    if (resume.ResumeId !== resumeId) resumes.push(resume);
+  });
+  user.Resumes = resumes;
+  try {
+    await user.save();
     return true;
   } catch (err) {
     console.log(err);

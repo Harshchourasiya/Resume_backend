@@ -37,7 +37,7 @@ const UserSchema = new Schema({
   },
   Resumes: {
     type: [ResumeSchema],
-    defalut:  {},
+    defalut:  [],
     validate : (value) =>{
       return value.length < 5;
     }
