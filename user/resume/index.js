@@ -8,7 +8,7 @@ const {
 const { failedRes, successRes } = require("../../helper/responesHelper");
 
 const getUserIdFromReq = (req) => {
-  return req.cookies.access_token;
+  return req.session.access_token;
 };
 
 /*

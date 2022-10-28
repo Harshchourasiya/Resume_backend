@@ -16,7 +16,7 @@ const { failedRes, successRes } = require("../helper/responesHelper");
 const {OTP_MAIL_FROM, OTP_MAIL_SUBJECT, GET_OTP_MAIL_HTML} = require("../helper/string")
 
 const getUserIdFromReq = (req) => {
-  return req.cookies.access_token;
+  return req.session.access_token;
 };
 
 router.post("/new", async (req, res) => {
@@ -66,7 +66,7 @@ router.post("/new", async (req, res) => {
   toRes.verificationCode = verificationCode;
 
   // for Checking sending otp
-  if (process.env['TEST']===1) {
+  if (process.env['DEVELOPMENT']===1) {
     toRes.otpCode = code;
   }
 
@@ -113,13 +113,9 @@ router.post("/login", async (req, res) => {
     let maxDay = 1;
     if (req.body.isRemember) maxDay = 30; 
     const toRes = successRes;
-
-    if (process.env['TEST']===1) toRes.access_token = isAuthentic; 
-    
-    res.cookie("access_token", isAuthentic, {
-      httpOnly: true,
-      maxDays : maxDay
-    }).status(200).send(toRes);
+    if (process.env['DEVELOPMENT']===1) toRes.access_token = isAuthentic; 
+    req.session.access_token = isAuthentic;
+    res.status(200).send(toRes);
   } else {
     res.status(400).send(failedRes);
   }
@@ -141,7 +137,7 @@ router.get("/info", async (req, res) => {
 // Logout
 
 router.get("/logout", async(req, res) => {
-  res.clearCookie('access_token');
+  req.session.access_token = null;
   res.status(200).send(successRes);
   res.end();
 });
