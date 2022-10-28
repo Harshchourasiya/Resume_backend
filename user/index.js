@@ -66,7 +66,7 @@ router.post("/new", async (req, res) => {
   toRes.verificationCode = verificationCode;
 
   // for Checking sending otp
-  if (process.env['DEVELOPMENT']===1) {
+  if (process.env['DEVELOPMENT']==1) {
     toRes.otpCode = code;
   }
 
@@ -110,10 +110,8 @@ router.post("/login", async (req, res) => {
 
   if (isAuthentic) {
     // Saving the session Id in the user's system (IF isRemeber is True)
-    let maxDay = 1;
-    if (req.body.isRemember) maxDay = 30; 
     const toRes = successRes;
-    if (process.env['DEVELOPMENT']===1) toRes.access_token = isAuthentic; 
+    if (process.env['DEVELOPMENT']==1) toRes.access_token = isAuthentic; 
     req.session.access_token = isAuthentic;
     res.status(200).send(toRes);
   } else {
@@ -147,7 +145,7 @@ router.delete("/deleteAccount", async(req, res) => {
   const isSuccessful = await deleteUser(getUserIdFromReq(req));
 
   if (isSuccessful) {
-    res.clearCookie('access_token');
+    res.session.access_token = null;
     res.status(200).send(successRes);
   } else {
 

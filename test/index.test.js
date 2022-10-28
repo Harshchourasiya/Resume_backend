@@ -13,7 +13,7 @@ const API = 'http://localhost:'+ process.env['PORT']
 describe("Now Let's Checkout that website", () => {
     let otpCode, verificationCode, token;
     const dataToSend = {
-        email : "HarshChourasiya0@gmail.com", 
+        email : "HarshChourasiyatest14@gmail.com", 
         password : "Password@123",
         name : "Harsh"
      };

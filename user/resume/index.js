@@ -33,7 +33,7 @@ This request will return the resume details
 */
 router.get('/getResume', async(req, res) => {
   const resume = await getResumeData(getUserIdFromReq(req), req.query.id);
-  if (typeof resume === "boolean") {
+  if (typeof resume == "boolean") {
     res.status(400).send(failedRes);
   } else {
     res.status(200).send(resume);

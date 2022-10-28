@@ -9,12 +9,22 @@ const oneDay = 1000 * 60 * 60 * 24;
 const PORT = process.env['PORT'];
 const DEVELOPMENT = process.env['DEVELOPMENT'];
 const cors = require("cors");
-
 const { successRes, failedRes } = require('./helper/responesHelper');
 const corsOptions = {
-    origin: process.env['FRONT_END_URI'],
+    origin: (DEVELOPMENT ==1  ? true : process.env['FRONT_END_URI']),
     credentials: true,            //access-control-allow-credentials:true
     optionSuccessStatus: 200,
+}
+const cookiesDevelopmentOption = { maxAge: oneDay ,
+    httpOnly: true,
+    secure: false,
+    sameSite:'lax',
+}
+
+const cookiesProducationOption = {
+    maxAge : oneDay,
+    secure: true,
+    sameSite: 'none'
 }
 
 app.set("trust proxy", 1);
@@ -25,10 +35,7 @@ app.use(cors(corsOptions))
 app.use(sessions({
     secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
     saveUninitialized: false,
-    cookie: { maxAge: oneDay ,
-        secure: (DEVELOPMENT === 1 ? false : true),
-        sameSite:'none',
-    },
+    cookie: (DEVELOPMENT==1 ? cookiesDevelopmentOption : cookiesProducationOption) ,
     resave: false
 }));
 app.use(express.json());
