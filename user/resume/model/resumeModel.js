@@ -102,11 +102,10 @@ const getResumeData = async (userId, resumeId) => {
 
 
 const deleteResume = async (userId, resumeId) => {
-  console.log(userId + " " + resumeId);
   try {
     await userModel.updateOne({ SessionId: userId }, {
       $pullAll: {
-        resumes: [{ResumeId: resumeId}],
+        Resumes: [{ResumeId: resumeId}],
       },
     });
 
