@@ -1,5 +1,5 @@
 # Resume Builder - Instant + Professional 📄
-This website will help you to create your resume instantly with AI suggestions. AI will help you to know what is the best place or word to use in your resume. You can create your resume in 5 Minutes and Download it on PDF formate. visit the website from [here](https://resumebuilderreactjs.netlify.app/)
+This website will help you to create your resume instantly with AI suggestions. AI will help you to know what is the best word to use in your resume. You can create your resume in 5 Minutes and Download it in PDF format. visit the website from [here](https://resumebuilderreactjs.netlify.app/)
 
 ### Table of Contents 📄
 
@@ -11,7 +11,7 @@ This website will help you to create your resume instantly with AI suggestions. 
 
 ## Project Details 📔
 
-This website will help you to create your resume instantly with AI suggestions. AI will help you to know what is the best place or word to use in your resume. You can create your resume in 5 Minutes and Download it on PDF formate. You can create your account and you can save the resume for later so that if you want to edit you just need to change and download the PDF. You can also select templates according to your liking.
+This website will help you create your resume instantly with AI suggestions. AI will help you to know which is the best word to use in your resume. You can create your resume in 5 minutes and download it in PDF format. You can create your own account on the website to save up to 5 resumes. You can edit your resume in just a minute and download PDF file of your resume. You can also choose the template according to your choice.
 
 ### Developing Proccess:
 
