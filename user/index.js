@@ -14,8 +14,11 @@ const otp = require("otp-generator");
 const { saveOTP, checkOTP } = require("./OTP/otpModel");
 const { failedRes, successRes } = require("../helper/responesHelper");
 const {OTP_MAIL_FROM, OTP_MAIL_SUBJECT, GET_OTP_MAIL_HTML} = require("../helper/string")
-
+const isDevelopment = process.env['DEVELOPMENT'];
 const getUserIdFromReq = (req) => {
+  if (isDevelopment == 1) {
+    return req.body.access_token;
+  }
   return req.session.access_token;
 };
 
@@ -45,13 +48,16 @@ router.post("/new", async (req, res) => {
     lowerCaseAlphabets: false,
   });
 
+  let isOtpSend = true;
   // Send Mail
-  const isOtpSend = await mail.send({
-    from: OTP_MAIL_FROM,
-    to: email,
-    subject: OTP_MAIL_SUBJECT,
-    html: GET_OTP_MAIL_HTML(code),
-  });
+  if (isDevelopment!=1) {
+    isOtpSend = await mail.send({
+      from: OTP_MAIL_FROM,
+      to: email,
+      subject: OTP_MAIL_SUBJECT,
+      html: GET_OTP_MAIL_HTML(code),
+    });
+  }
   
   if (!isOtpSend) return res.status(400).send(failedRes);
   // Generate Verification Code
@@ -66,7 +72,7 @@ router.post("/new", async (req, res) => {
   toRes.verificationCode = verificationCode;
 
   // for Checking sending otp
-  if (process.env['DEVELOPMENT']==1) {
+  if (isDevelopment==1) {
     toRes.otpCode = code;
   }
 
@@ -88,7 +94,7 @@ router.post("/otpverification", async (req, res) => {
 
   if (isCorrect) {
     const isSaved = await createUserAndReturnIfSaved(req.body);
-    if (isSaved != null) {
+    if (isSaved) {
       res.status(200).send(successRes);
     } else {
       res.status(400).send(failedRes);
@@ -143,9 +149,8 @@ router.get("/logout", async(req, res) => {
 // Deleting the Account of the User
 router.delete("/deleteAccount", async(req, res) => {
   const isSuccessful = await deleteUser(getUserIdFromReq(req));
-
   if (isSuccessful) {
-    res.session.access_token = null;
+    if(isDevelopment != 1) res.session.access_token = null;
     res.status(200).send(successRes);
   } else {
 

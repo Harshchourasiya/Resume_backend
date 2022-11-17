@@ -11,9 +11,9 @@ require('dotenv').config();
 const API = 'http://localhost:'+ process.env['PORT']
 
 describe("Now Let's Checkout that website", () => {
-    let otpCode, verificationCode, token;
+    let otpCode, verificationCode, token, data;
     const dataToSend = {
-        email : "HarshChourasiyatest14@gmail.com", 
+        email : "HarshChourasiya@yahoo.com", 
         password : "Password@123",
         name : "Harsh"
      };
@@ -34,7 +34,7 @@ describe("Now Let's Checkout that website", () => {
     });
 
     it ("Ahh, So they also verify Email Address, Let me get it", (done) => {
-        let data = dataToSend;
+        data = dataToSend;
         data.otpCode = otpCode;
         data.verificationCode = verificationCode;
         chai
@@ -75,10 +75,11 @@ describe("Now Let's Checkout that website", () => {
     */
 
     it ("Yayyy, Get a internship finally, Okay I don't need that website anymore for now so lets delete my account for now", (done) => {
+        data = {access_token : token};
         chai
         .request(API)
         .delete("/user/deleteAccount")
-        .set('Cookie', `access_token=${token}`)
+        .send(data)
         .end((err, res) => {
             res.should.have.status(200);
             done();

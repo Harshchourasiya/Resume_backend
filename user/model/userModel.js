@@ -13,7 +13,7 @@ const createUserAndReturnIfSaved = async (body) => {
     return user.Session;
   } catch (err) {
     console.log(err);
-    return null;
+    return false;
   }
 };
 
