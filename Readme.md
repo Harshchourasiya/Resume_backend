@@ -1,29 +1,29 @@
-# This Project is not active for Now, You can contribute on Frontend from [here.](https://github.com/Harshchourasiya/resume_frontend)
-
-# Animre - *An*alyze , *im*prove , *re*peat
-
-***An***alyze , ***Im***prove , ***Re***peat in short - **Animre** is a website that will help you to **Analyze your resume** and helps you to **improve** according to the response that you are getting from the **recruiter that are visiting your resume.**
+# Resume Builder - Instant + Professional 📄
+This website will help you to create your resume instantly with AI suggestions. AI will help you to know what is the best word to use in your resume. You can create your resume in 5 Minutes and Download it in PDF format. visit the website from [here](https://resumebuilderreactjs.netlify.app/)
 
 ### Table of Contents 📄
 
 - [Project Details](https://github.com/Harshchourasiya/Resume_backend#project-details)
+- [Developing Proccess](https://github.com/Harshchourasiya/Resume_backend#developing-process)
 - [Techonologies](https://github.com/Harshchourasiya/Resume_backend#technologies)
 - [Setup](https://github.com/Harshchourasiya/Resume_backend#setup)
-- [Understand the Codebase](https://github.com/Harshchourasiya/Resume_backend#understand-the-codebase)
-- [Don't Like Backend?](https://github.com/Harshchourasiya/Resume_backend#dont-like-backend)
-- [Special Thanks for Contributors](https://github.com/Harshchourasiya/Resume_backend#special-thanks-for-contributors)
+- [Contributors](https://github.com/Harshchourasiya/Resume_backend#contributors)
 
 ## Project Details 📔
 
-The website can solve the issue that mostly Freshers for IT sector struggle like many peoples share there resume online but don't get any response. So This website help the User to analyze the resume through recruiter behaviour and improve accordingly.
-If you have time you should also read the story of the user (offcourse Future user) How this website will help them. This story will Help you to deeply understand this website's goal. It's a small story [here](Story.md).
+This website will help you create your resume instantly with AI suggestions. AI will help you to know which is the best word to use in your resume. You can create your resume in 5 minutes and download it in PDF format. You can create your own account on the website to save up to 5 resumes. You can edit your resume in just a minute and download PDF file of your resume. You can also choose the template according to your choice.
 
-If you don't have time, Following the main features of the website:-
+### Developing Proccess:
 
-- User can create 5 Resumes and Edit them anytime.
-- User can Add Access Restriction.
-- User can Analyze Every Resume.
-- and Many more...
+### Phase 1 (Almost Complete):
+     In this phase We just create a Resume Builder that can instanly create the resume for the user and user can download it. 
+     User can create account and save resume with templates
+     Complete Resume Builder walk through :
+
+https://user-images.githubusercontent.com/48551992/198675257-0d6282c2-8cf5-45db-851a-3fc8176ed456.mp4
+
+### Phase 2 (Start Soon):
+     In this Phase will be integrate AI system. Details will be added soon
 
 ## Technologies 📝
 
@@ -58,9 +58,19 @@ In this section We will discuss some important thing about codebase that might h
 
 If you don't like or don't know backend then you can contribute on its frontend part as well from [here](https://github.com/Harshchourasiya/resume_frontend).
 
-## Special Thanks for Contributors ❤️
+## Contributors 
 
-If you contribute on this project then you get a tag on this website wheneven someone visit your resume on this website. They are able to see the tag that's shows that you help us in creating this website. It's not a big deal but it's the least we can do for our contributor. I again encourage you to read this [story](Story.md) if you have time.
+1. Open Issue tab and Pick a issue that you want to solve.
+2. Comment that you want to work on that issue.
+3. Issue will be assign to you.
+
+**OR**
+
+1. Find issue and create issue in the issue section.
+2. Comment that you are working on this issue.
+3. Start working.
+
+***Give a Star If you like it ⭐***
 
 ***If you face any problem or want to give any suggestion Please Raise a Issue.***
 
