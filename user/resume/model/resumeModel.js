@@ -7,11 +7,12 @@ const saveResume = async (userId, resumeId, data, name) => {
   const user = await userModel.findOne({ Session: userId });
   // checking User exits
   if (user === null) return false;
-
+  
   let idx = user.Resumes.findIndex((resume) => {
     return resume.ResumeId === resumeId
   });
-
+  
+  
   if (idx < 0) {
     // Creating Resume
     const resume = {};
@@ -23,8 +24,8 @@ const saveResume = async (userId, resumeId, data, name) => {
     user.Resumes.push(resume);
   } else {
     // saving data
-    resume.ResumeName = name;
     const resume = user.Resumes[idx];
+    resume.ResumeName = name;
     setDataToResume(resume, data);
   }
 

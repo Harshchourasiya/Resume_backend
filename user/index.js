@@ -16,10 +16,7 @@ const { failedRes, successRes } = require("../helper/responesHelper");
 const {OTP_MAIL_FROM, OTP_MAIL_SUBJECT, GET_OTP_MAIL_HTML} = require("../helper/string")
 const isDevelopment = process.env['DEVELOPMENT'];
 const getUserIdFromReq = (req) => {
-  if (isDevelopment == 1) {
-    return req.body.access_token;
-  }
-  return req.session.access_token;
+  return req.body.access_token == undefined ? req.session.access_token : req.body.access_token;
 };
 
 router.post("/new", async (req, res) => {
